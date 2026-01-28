@@ -1,4 +1,4 @@
-// Quotes for each layer (4 quotes per layer)
+// Your 24 quotes
 const quotes = [
     [
         "You make my world softer just by existing.",
@@ -38,73 +38,78 @@ const quotes = [
     ]
 ];
 
-const layerBox = document.getElementById("layerBox");
-let currentLayer = 0;
+let currentLayer = -1;
 
-// Create a layer
-function createLayer(index) {
-    const box = document.createElement("div");
-    box.className = "box";
+document.body.addEventListener("click", () => {
+    const audio = document.getElementById("bgMusic");
+    if (audio.paused) audio.play();
+}, { once: true });
 
-    // 4 side quotes
-    quotes[index].forEach((q, i) => {
-        let side = document.createElement("div");
-        side.className = "side";
-        side.textContent = q;
+showNextLayer();
 
-        let angle = i * 90;
-        side.style.transform = `rotateY(${angle}deg) translateZ(150px)`;
-        box.appendChild(side);
-    });
+// Load next layer
+function showNextLayer() {
+    currentLayer++;
 
-    // Center content: image + button
-    let center = document.createElement("div");
-    center.className = "center-content";
+    const container = document.getElementById("boxContainer");
+    container.innerHTML = "";
 
-    let img = document.createElement("img");
-    img.src = `assets/images/layer${index + 1}.jpg`;
+    if (currentLayer === 6) {
+        confetti();
+        return;
+    }
+
+    const layer = document.createElement("div");
+    layer.className = "layer";
+
+    // Center box
+    const center = document.createElement("div");
+    center.className = "center-box";
+
+    // Image
+    const img = document.createElement("img");
+    img.src = `assets/images/layer${currentLayer + 1}.jpg`;
     center.appendChild(img);
 
-    let btn = document.createElement("button");
+    // Button
+    const btn = document.createElement("button");
     btn.className = "heart-btn";
-    btn.textContent = index === 5 ? "Finish ❤️" : "Click Here";
-
-    btn.onclick = () => {
-        if (index === 5) triggerConfetti();
-        nextLayer();
-    };
-
+    btn.textContent = currentLayer === 5 ? "Finish ❤️" : "Click Here";
+    btn.onclick = openFlaps;
     center.appendChild(btn);
-    box.appendChild(center);
 
-    return box;
-}
+    // 4 flaps
+    const flapTop = createFlap(quotes[currentLayer][0], "flap flap-top");
+    const flapBottom = createFlap(quotes[currentLayer][1], "flap flap-bottom");
+    const flapLeft = createFlap(quotes[currentLayer][2], "flap flap-left");
+    const flapRight = createFlap(quotes[currentLayer][3], "flap flap-right");
 
-// Show a specific layer
-function showLayer(index) {
-    layerBox.innerHTML = "";
-    const layer = createLayer(index);
-    layerBox.appendChild(layer);
-}
+    layer.appendChild(center);
+    layer.appendChild(flapTop);
+    layer.appendChild(flapBottom);
+    layer.appendChild(flapLeft);
+    layer.appendChild(flapRight);
 
-// Go to next layer
-function nextLayer() {
-    currentLayer++;
-    if (currentLayer < 6) {
-        showLayer(currentLayer);
+    container.appendChild(layer);
+
+    function openFlaps() {
+        flapTop.classList.add("open");
+        flapBottom.classList.add("open");
+        flapLeft.classList.add("open");
+        flapRight.classList.add("open");
+
+        flapTop.style.transform = "rotateX(-90deg)";
+        flapBottom.style.transform = "rotateX(90deg)";
+        flapLeft.style.transform = "rotateY(-90deg)";
+        flapRight.style.transform = "rotateY(90deg)";
+
+        setTimeout(showNextLayer, 1000);
     }
 }
 
-// Confetti effect for final layer
-function triggerConfetti() {
-    confetti();
+function createFlap(text, className) {
+    const d = document.createElement("div");
+    d.className = className;
+    d.textContent = text;
+    return d;
 }
-
-// Play music on first click
-document.body.addEventListener("click", () => {
-    const music = document.getElementById("bgMusic");
-    if (music.paused) music.play();
-}, { once: true });
-
-// Load first layer
-showLayer(0);
