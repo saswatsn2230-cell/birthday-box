@@ -13,16 +13,18 @@ body {
     align-items: center;
 }
 
+/* Main layer container */
 .box {
     width: 300px;
     height: 300px;
     background: #a26cd9; /* medium purple */
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 1.1s ease;
+    transition: transform 1s ease;
     cursor: pointer;
 }
 
+/* Side panels */
 .side {
     position: absolute;
     width: 100%;
@@ -39,6 +41,7 @@ body {
     text-align: center;
 }
 
+/* Center content */
 .center-content {
     position: absolute;
     width: 100%;
@@ -73,5 +76,5 @@ body {
 }
 
 .heart-btn:hover {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
