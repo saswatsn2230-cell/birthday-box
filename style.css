@@ -2,10 +2,10 @@ body {
     margin: 0;
     background: white;
     font-family: 'Poppins', sans-serif;
-    user-select: none;
+    overflow: hidden;
 }
 
-.container {
+#boxContainer {
     width: 100%;
     height: 100vh;
     display: flex;
@@ -13,68 +13,80 @@ body {
     align-items: center;
 }
 
-/* Main layer container */
-.box {
-    width: 300px;
-    height: 300px;
-    background: #a26cd9; /* medium purple */
+/* Entire layer wrapper */
+.layer {
     position: relative;
-    transform-style: preserve-3d;
-    transition: transform 1s ease;
-    cursor: pointer;
+    width: 280px;
+    height: 280px;
+    perspective: 1200px;
+    animation: riseUp 1.2s ease forwards;
 }
 
-/* Side panels */
-.side {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+@keyframes riseUp {
+    0% { transform: translateY(200px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Inner box */
+.center-box {
+    width: 280px;
+    height: 280px;
     background: #a26cd9;
-    color: white;
-    font-size: 15px;
-    padding: 20px;
-    box-sizing: border-box;
-    backface-visibility: hidden;
+    border-radius: 10px;
+    z-index: 10;
+    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
-}
-
-/* Center content */
-.center-content {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #a26cd9;
-    display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    padding: 10px;
-    box-sizing: border-box;
+    transition: transform 0.8s ease;
 }
 
-.center-content img {
-    width: 160px;
-    height: 160px;
+.center-box img {
+    width: 150px;
+    height: 150px;
     object-fit: cover;
     border-radius: 12px;
+    margin-bottom: 15px;
 }
 
+/* Heart button */
 .heart-btn {
     background: red;
     color: white;
-    padding: 12px 18px;
-    border-radius: 50px;
+    padding: 12px 22px;
     border: none;
+    border-radius: 50px;
     font-size: 16px;
-    cursor: pointer;
     font-weight: bold;
-    box-shadow: 0 4px 10px rgba(255,0,0,0.3);
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(255,0,0,0.4);
 }
 
-.heart-btn:hover {
-    transform: scale(1.08);
+/* Flaps */
+.flap {
+    width: 280px;
+    height: 280px;
+    background: #a26cd9;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    color: white;
+    font-size: 15px;
+    text-align: center;
+    box-sizing: border-box;
+    opacity: 0;
 }
+
+.flap.open {
+    opacity: 1;
+    transition: transform 0.8s ease, opacity 0.3s;
+}
+
+/* Each flap position */
+.flap-top { top: 0; transform-origin: top; }
+.flap-bottom { bottom: 0; transform-origin: bottom; }
+.flap-left { left: 0; transform-origin: left; }
+.flap-right { right: 0; transform-origin: right; }
