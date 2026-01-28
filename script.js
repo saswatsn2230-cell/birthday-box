@@ -41,11 +41,12 @@ const quotes = [
 const layerBox = document.getElementById("layerBox");
 let currentLayer = 0;
 
+// Create a layer
 function createLayer(index) {
     const box = document.createElement("div");
     box.className = "box";
 
-    // 4 sides
+    // 4 side quotes
     quotes[index].forEach((q, i) => {
         let side = document.createElement("div");
         side.className = "side";
@@ -56,23 +57,20 @@ function createLayer(index) {
         box.appendChild(side);
     });
 
-    // center photo + button
+    // Center content: image + button
     let center = document.createElement("div");
     center.className = "center-content";
 
     let img = document.createElement("img");
     img.src = `assets/images/layer${index + 1}.jpg`;
-
     center.appendChild(img);
 
     let btn = document.createElement("button");
     btn.className = "heart-btn";
-    btn.textContent = index === 5 ? "Open Final" : "Click Here";
+    btn.textContent = index === 5 ? "Finish ❤️" : "Click Here";
 
     btn.onclick = () => {
-        if (index === 5) {
-            triggerConfetti();
-        }
+        if (index === 5) triggerConfetti();
         nextLayer();
     };
 
@@ -82,12 +80,14 @@ function createLayer(index) {
     return box;
 }
 
+// Show a specific layer
 function showLayer(index) {
     layerBox.innerHTML = "";
     const layer = createLayer(index);
     layerBox.appendChild(layer);
 }
 
+// Go to next layer
 function nextLayer() {
     currentLayer++;
     if (currentLayer < 6) {
@@ -95,15 +95,16 @@ function nextLayer() {
     }
 }
 
+// Confetti effect for final layer
 function triggerConfetti() {
     confetti();
 }
 
-// Play music after first click
+// Play music on first click
 document.body.addEventListener("click", () => {
     const music = document.getElementById("bgMusic");
     if (music.paused) music.play();
 }, { once: true });
 
-// Initial
+// Load first layer
 showLayer(0);
